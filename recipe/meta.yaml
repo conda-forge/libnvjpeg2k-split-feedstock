@@ -1,4 +1,4 @@
-{% set version = "0.8.1.40" %}
+{% set version = "0.9.0.43" %}
 {% set platform = "linux-x86_64" %}  # [linux64]
 {% set platform = "linux-ppc64le" %}  # [ppc64le]
 {% set platform = "linux-sbsa" %}  # [aarch64 and arm_variant_type == "sbsa"]
@@ -9,10 +9,9 @@
 {% set cuda_compiler_version = cuda_compiler_version | default("None") %}
 {% set soname = version.split(".")[0] %}
 
-{% set sha = "b028f3718f453a71736c01fb8dcbb0174336ea5d69e52fd12a756d6ff5ce785d" %}  # [linux64]
-{% set sha = "34e02b499e0b0ca1af9b2d69454f979d530762df6a46f736feb4da5cb3824cbd" %}  # [aarch64 and arm_variant_type == "sbsa"]
-{% set sha = "5d0e61f48dc99c3ac464ceef173c071d8fb6ee0e7e6a83b199291307d9970485" %}  # [aarch64 and arm_variant_type == "tegra"]
-{% set sha = "970308dd3837964455600ce68af2fc0ad5e2b4dc415891e8d255ad1191fc248d" %}  # [win]
+{% set sha = "1d26f62a7141e81c604342a610deb8ad8d10e1c08cb59598881dc201e59f21a3" %}  # [linux64]
+{% set sha = "03e37b8e0f2d67a1ee376e6ac54fa9d62284bbdbf9edf90ea7d0a05b4c45bce1" %}  # [aarch64 and arm_variant_type == "sbsa"]
+{% set sha = "272d409945cd1c00beaa7f5d4c8197139aa32394358ea76d83f2cd2b51faf0c7" %}  # [win]
 
 package:
   name: nvjpeg2000
@@ -23,7 +22,7 @@ source:
   sha256: {{ sha }}
 
 build:
-  number: 4
+  number: 0
   skip: true  # [osx or ppc64le or cuda_compiler_version in (None, "None")]
 
 requirements:
@@ -36,7 +35,6 @@ outputs:
     build:
       ignore_run_exports:
         - cuda-version
-        - cudatoolkit
     files:
       - lib/libnvjpeg2k.so.*            # [linux]
       - Library\bin\nvjpeg2k*.dll       # [win]
@@ -45,14 +43,12 @@ outputs:
         - {{ compiler("c") }}
         - {{ compiler("cuda") }}
         - {{ stdlib("c") }}
-        - arm-variant * {{ arm_variant_type }}  # [aarch64]
       host:
         - cuda-version {{ cuda_compiler_version }}
       run:
         # Any CUDA within the same major version
         # https://docs.nvidia.com/cuda/nvjpeg2000/userguide.html#prerequisites
         - {{ pin_compatible("cuda-version", min_pin="x", max_pin="x") }}
-        - arm-variant * {{ arm_variant_type }}  # [aarch64]
     test:
       commands:
         - test -L $PREFIX/lib/libnvjpeg2k.so.{{ soname }}                            # [linux]
@@ -84,7 +80,6 @@ outputs:
       run:
         - {{ pin_subpackage("libnvjpeg2k" ~ soname, exact=True) }}
         - {{ pin_compatible("cuda-version", min_pin="x", max_pin="x") }}
-        - arm-variant * {{ arm_variant_type }}  # [aarch64]
     test:
       commands:
         - test -L $PREFIX/lib/libnvjpeg2k.so                                    # [linux]
@@ -109,7 +104,6 @@ outputs:
       run:
         - {{ pin_subpackage("libnvjpeg2k-dev", exact=True) }}
         - {{ pin_compatible("cuda-version", min_pin="x", max_pin="x") }}
-        - arm-variant * {{ arm_variant_type }}  # [aarch64]
     test:
       commands:
         - test -f $PREFIX/lib/libnvjpeg2k_static.a

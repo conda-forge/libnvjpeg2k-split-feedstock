@@ -1,7 +1,0 @@
-arm_variant_type:  # [aarch64]
-  - sbsa           # [aarch64]
-  - tegra          # [false]
-# https://docs.nvidia.com/cuda/nvjpeg2000/userguide.html#platforms-supported
-c_stdlib_version:  # [linux]
-  - 2.17  # [linux and x86_64]
-  - 2.28  # [linux and aarch64]
