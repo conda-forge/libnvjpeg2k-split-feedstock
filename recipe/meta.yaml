@@ -22,7 +22,7 @@ source:
   sha256: {{ sha }}
 
 build:
-  number: 0
+  number: 1
   skip: true  # [osx or ppc64le or cuda_compiler_version in (None, "None")]
 
 requirements:
