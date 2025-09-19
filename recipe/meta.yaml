@@ -126,5 +126,7 @@ about:
 
 extra:
   feedstock-name: libnvjpeg2k
+  compute-subdir: nvjpeg2000
+  redist-json-name: libnvjpeg_2k
   recipe-maintainers:
     - conda-forge/cuda
