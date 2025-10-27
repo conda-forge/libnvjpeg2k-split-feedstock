@@ -10,3 +10,8 @@ github:
   tooling_branch_name: main
 provider:
   linux_aarch64: default
+bot:
+  version_updates:
+    nvidia:
+      compute_subdir: nvjpeg2000
+      json_name: libnvjpeg_2k
