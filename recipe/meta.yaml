@@ -1,4 +1,4 @@
-{% set version = "0.9.0.43" %}
+{% set version = "0.9.1.47" %}
 {% set platform = "linux-x86_64" %}  # [linux64]
 {% set platform = "linux-ppc64le" %}  # [ppc64le]
 {% set platform = "linux-sbsa" %}  # [aarch64 and arm_variant_type == "sbsa"]
@@ -8,21 +8,25 @@
 {% set extension = "zip" %}  # [win]
 {% set cuda_compiler_version = cuda_compiler_version | default("None") %}
 {% set soname = version.split(".")[0] %}
+{% set cuda_major = environ.get("cuda_compiler_version", "13.0").split(".")[0] %}
 
-{% set sha = "1d26f62a7141e81c604342a610deb8ad8d10e1c08cb59598881dc201e59f21a3" %}  # [linux64]
-{% set sha = "03e37b8e0f2d67a1ee376e6ac54fa9d62284bbdbf9edf90ea7d0a05b4c45bce1" %}  # [aarch64 and arm_variant_type == "sbsa"]
-{% set sha = "272d409945cd1c00beaa7f5d4c8197139aa32394358ea76d83f2cd2b51faf0c7" %}  # [win]
+{% set sha256 = "5803ed38253923578a2ae3b21dabdc963c4effccfed07ca5e1e3acb84ecd1535" %}  # [linux64 and (cuda_compiler_version or "").startswith("12")]
+{% set sha256 = "34d482f4145cbdda731e66f8c31e2019385e24274f00892bb112a6523758d11f" %}  # [linux64 and (cuda_compiler_version or "").startswith("13")]
+{% set sha256 = "25878f583c9797146aa7b396f8219da23f388780c4fc4f72121300aace9ba1b3" %}  # [aarch64 and (cuda_compiler_version or "").startswith("12") and arm_variant_type == "sbsa"]
+{% set sha256 = "4e85e0eec6f08b4300a827e028f4f28c20b641adf361c795569c25947cb19852" %}  # [aarch64 and (cuda_compiler_version or "").startswith("13") and arm_variant_type == "sbsa"]
+{% set sha256 = "f732791bae840f84a905544a398856adad2701ea3cb510ee72582c555c700fd4" %}  # [win64 and (cuda_compiler_version or "").startswith("12")]
+{% set sha256 = "82f32f3fc416769b64dcce2d605b1bfc0cbc1e3149c19b03f6042f2c99ebd2d1" %}  # [win64 and (cuda_compiler_version or "").startswith("13")]
 
 package:
   name: nvjpeg2000
   version: {{ version }}
 
 source:
-  url: https://developer.download.nvidia.com/compute/nvjpeg2000/redist/libnvjpeg_2k/{{ platform }}/libnvjpeg_2k-{{ platform }}-{{ version }}-archive.{{ extension }}
-  sha256: {{ sha }}
+  url: https://developer.download.nvidia.com/compute/nvjpeg2000/redist/libnvjpeg_2k/{{ platform }}/libnvjpeg_2k-{{ platform }}-{{ version }}_cuda{{ cuda_major }}-archive.{{ extension }}
+  sha256: {{ sha256 }}
 
 build:
-  number: 1
+  number: 0
   skip: true  # [osx or ppc64le or cuda_compiler_version in (None, "None")]
 
 requirements:
