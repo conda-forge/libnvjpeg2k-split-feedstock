@@ -47,6 +47,7 @@ outputs:
         - {{ compiler("c") }}
         - {{ compiler("cuda") }}
         - {{ stdlib("c") }}
+        - arm-variant * {{ arm_variant_type }}  # [linux and aarch64 and cuda_compiler_version != "None"]
       host:
         - cuda-version {{ cuda_compiler_version }}
       run:
@@ -81,6 +82,7 @@ outputs:
       host:
         - {{ pin_subpackage("libnvjpeg2k" ~ soname, exact=True) }}
         - cuda-version {{ cuda_compiler_version }}
+        - arm-variant * {{ arm_variant_type }}  # [linux and aarch64 and cuda_compiler_version != "None"]
       run:
         - {{ pin_subpackage("libnvjpeg2k" ~ soname, exact=True) }}
         - {{ pin_compatible("cuda-version", min_pin="x", max_pin="x") }}
@@ -105,6 +107,7 @@ outputs:
       host:
         - {{ pin_subpackage("libnvjpeg2k-dev", exact=True) }}
         - cuda-version {{ cuda_compiler_version }}
+        - arm-variant * {{ arm_variant_type }}  # [linux and aarch64 and cuda_compiler_version != "None"]
       run:
         - {{ pin_subpackage("libnvjpeg2k-dev", exact=True) }}
         - {{ pin_compatible("cuda-version", min_pin="x", max_pin="x") }}
