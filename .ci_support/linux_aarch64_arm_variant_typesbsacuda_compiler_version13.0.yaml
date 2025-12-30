@@ -26,3 +26,4 @@ zip_keys:
 - - c_compiler_version
   - c_stdlib_version
   - cuda_compiler_version
+  - arm_variant_type
