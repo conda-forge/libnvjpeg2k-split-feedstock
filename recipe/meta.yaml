@@ -12,6 +12,7 @@
 
 {% set sha256 = "5803ed38253923578a2ae3b21dabdc963c4effccfed07ca5e1e3acb84ecd1535" %}  # [linux64 and (cuda_compiler_version or "").startswith("12")]
 {% set sha256 = "34d482f4145cbdda731e66f8c31e2019385e24274f00892bb112a6523758d11f" %}  # [linux64 and (cuda_compiler_version or "").startswith("13")]
+{% set sha256 = "7c0585d538b97aef4c41b126a90c387c0e9d4f18be6166a76c2a264ffc8c1217" %}  # [aarch64 and (cuda_compiler_version or "").startswith("12") and arm_variant_type == "tegra"]
 {% set sha256 = "25878f583c9797146aa7b396f8219da23f388780c4fc4f72121300aace9ba1b3" %}  # [aarch64 and (cuda_compiler_version or "").startswith("12") and arm_variant_type == "sbsa"]
 {% set sha256 = "4e85e0eec6f08b4300a827e028f4f28c20b641adf361c795569c25947cb19852" %}  # [aarch64 and (cuda_compiler_version or "").startswith("13") and arm_variant_type == "sbsa"]
 {% set sha256 = "f732791bae840f84a905544a398856adad2701ea3cb510ee72582c555c700fd4" %}  # [win64 and (cuda_compiler_version or "").startswith("12")]
@@ -26,7 +27,7 @@ source:
   sha256: {{ sha256 }}
 
 build:
-  number: 0
+  number: 1
   skip: true  # [osx or ppc64le or cuda_compiler_version in (None, "None")]
 
 requirements:
@@ -47,6 +48,7 @@ outputs:
         - {{ compiler("c") }}
         - {{ compiler("cuda") }}
         - {{ stdlib("c") }}
+        - arm-variant * {{ arm_variant_type }}  # [linux and aarch64 and cuda_compiler_version != "None"]
       host:
         - cuda-version {{ cuda_compiler_version }}
       run:
@@ -81,6 +83,7 @@ outputs:
       host:
         - {{ pin_subpackage("libnvjpeg2k" ~ soname, exact=True) }}
         - cuda-version {{ cuda_compiler_version }}
+        - arm-variant * {{ arm_variant_type }}  # [linux and aarch64 and cuda_compiler_version != "None"]
       run:
         - {{ pin_subpackage("libnvjpeg2k" ~ soname, exact=True) }}
         - {{ pin_compatible("cuda-version", min_pin="x", max_pin="x") }}
@@ -105,6 +108,7 @@ outputs:
       host:
         - {{ pin_subpackage("libnvjpeg2k-dev", exact=True) }}
         - cuda-version {{ cuda_compiler_version }}
+        - arm-variant * {{ arm_variant_type }}  # [linux and aarch64 and cuda_compiler_version != "None"]
       run:
         - {{ pin_subpackage("libnvjpeg2k-dev", exact=True) }}
         - {{ pin_compatible("cuda-version", min_pin="x", max_pin="x") }}
